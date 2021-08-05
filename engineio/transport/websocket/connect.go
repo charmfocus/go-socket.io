@@ -76,8 +76,10 @@ func (c *conn) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *conn) Close() error {
+	var err error
 	c.closeOnce.Do(func() {
+		err = c.ws.Close()
 		close(c.closed)
 	})
-	return c.ws.Close()
+	return err
 }

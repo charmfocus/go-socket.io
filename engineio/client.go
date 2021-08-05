@@ -52,10 +52,12 @@ func (c *client) Transport() string {
 }
 
 func (c *client) Close() error {
+	var err error
 	c.closeOnce.Do(func() {
+		err = c.conn.Close()
 		close(c.close)
 	})
-	return c.conn.Close()
+	return err
 }
 
 func (c *client) NextReader() (session.FrameType, io.ReadCloser, error) {
