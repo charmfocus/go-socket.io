@@ -7,10 +7,12 @@ type RedisAdapterOptions struct {
 	// deprecated. Usage Addr options
 	Host string
 	// deprecated. Usage Addr options
-	Port    string
-	Addr    string
-	Prefix  string
-	Network string
+	Port     string
+	Addr     string
+	Username string
+	Password string
+	Prefix   string
+	Network  string
 }
 
 func (ro *RedisAdapterOptions) getAddr() string {
@@ -42,6 +44,14 @@ func getOptions(opts *RedisAdapterOptions) *RedisAdapterOptions {
 
 		if opts.Addr != "" {
 			options.Addr = opts.Addr
+		}
+
+		if opts.Username != "" {
+			options.Username = opts.Username
+		}
+
+		if opts.Password != "" {
+			options.Password = opts.Password
 		}
 
 		if opts.Prefix != "" {

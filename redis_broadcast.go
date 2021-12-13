@@ -80,12 +80,20 @@ type allRoomResponse struct {
 
 func newRedisBroadcast(nsp string, opts *RedisAdapterOptions) (*redisBroadcast, error) {
 	addr := opts.getAddr()
-	pub, err := redis.Dial(opts.Network, addr)
+	var dialOpts []redis.DialOption
+	if opts.Username != "" {
+		dialOpts = append(dialOpts, redis.DialUsername(opts.Username))
+	}
+	if opts.Password != "" {
+		dialOpts = append(dialOpts, redis.DialPassword(opts.Password))
+	}
+
+	pub, err := redis.Dial(opts.Network, addr, dialOpts...)
 	if err != nil {
 		return nil, err
 	}
 
-	sub, err := redis.Dial(opts.Network, addr)
+	sub, err := redis.Dial(opts.Network, addr, dialOpts...)
 	if err != nil {
 		return nil, err
 	}
